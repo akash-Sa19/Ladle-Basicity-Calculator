@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ladle Basicity Calculator</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,500;0,700;0,900;1,300;1,400;1,500;1,700;1,900&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        font-family: "Roboto", sans-serif;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100vw;
+        height: 100vh;
+        background-color: #E6DACE;
+      }
+      input {
+        margin-top: 8px;
+        font-weight: 500;
+      }
+      label {
+        font-weight: 600;
+      }
+       .flexClass {
+        display: flex;
+        font-size: 20px;
+        font-weight: 500;
+        
+      }
+      .margin-left {
+        margin-left: 8px;
+      }
+      .justify-center {
+        display: flex;
+        justify-content: center;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- main -->
+    <div
+      class="cardDiv"
+      style="display: flex; flex-direction: column; gap: 30px; width: 500px; height: 530px; justify-content: center; align-items: center; background-color: #F4ECE6; border-radius: 10px;"
+    >
+      <!-- 1 -->
+      <div style="display: flex; gap: 40px">
+        <!-- 1.a -->
+        <div style="display: flex; flex-direction: column; gap: 20px">
+          <!-- 1.a.a -->
+          <div>
+            <label for="cao" >CaO :</label><br />
+            <input type="number" id="cao" name="cao" />
+          </div>
+          <!-- 1.a.b -->
+          <div>
+            <label for="mgo">MgO :</label><br />
+            <input type="number" id="mgo" name="mgo" class="inputDiv" />
+          </div>
+          <!-- 1.a.c -->
+          <div>
+            <label for="sio">SiO <sub>2</sub> :</label><br />
+            <input type="number" id="sio" name="sio" class="inputDiv" />
+          </div>
+        </div>
+
+        <!-- 1.b -->
+        <div style="display: flex; flex-direction: column; gap: 20px; ;">
+          <div>
+            <label for="ppm">O_ppm :</label><br />
+            <input type="number" id="ppm" name="ppm" class="inputDiv" />
+          </div>
+          <div>
+            <label for="ton">Ton :</label><br />
+            <input type="number" id="ton" name="ton" class="inputDiv" />
+          </div>
+          <div>
+            <label for="totalWeight">Slag Weight :</label><br />
+            <input
+              type="number"
+              id="totalWeight"
+              name="totalWeight"
+              class="inputDiv"
+            />
+          </div>
+        </div>
+      </div>
+
+      <!-- 2 -->
+      <!-- calc button -->
+      <div style="display: flex; justify-content: center;  ">
+        <button onclick="calc()" type="button" style="width: 120px;height: 30px; font-weight: 600; font-size: 16px;">
+          Calculate
+        </button>
+      </div>
+
+      <!-- 3 -->
+      <!-- values -->
+      <div style="display: flex; flex-direction: column; align-items: start; width: 400px;">
+        <div class="flexClass">
+          <p>Aluminum Weight (kg) :</p>
+          <p class="margin-left" id="aluminumWeight"></p></div>
+        
+        <div class="flexClass" style="display: flex;">
+          <p>Percentage of Al<sub>2</sub>O<sub>3</sub> :</p>
+            <p class="margin-left" id="aluminumPercentage"></p>
+        </div>
+        <div class="flexClass">
+          <p>Calculated Basicity :</p>
+          <p class="margin-left" id="basicity"></p></div>
+      </div>
+    </div>
+    <script>
+      function calculate_Al_in_kg(O_ppm, ton) {
+        return (2 * 26.98 * O_ppm * ton) / (3 * 1000 * 15.99);
+      }
+      function calculate_Al2O3(Al_in_kg, total_weight_of_slag_in_kg) {
+        var Total_Al = Al_in_kg / 0.75;
+        var total_amt_of_Al2O3_in_kg = Al_in_kg * (102 / 54);
+        var percentage_of_Al2O3 = (total_amt_of_Al2O3_in_kg * 100) / total_weight_of_slag_in_kg;
+        return parseFloat(percentage_of_Al2O3);
+      }
+      function calculate_basicity(CaO, MgO, SiO2, Al2O3) {
+        console.log((CaO + MgO) / (SiO2 + Al2O3))
+        return parseFloat(CaO + MgO) / parseFloat(SiO2 + Al2O3);
+      }
+      function calc() {
+        CaO = document.getElementById("cao").value;
+        MgO = document.getElementById("mgo").value;
+        SiO2 = document.getElementById("sio").value;
+        O_ppm = document.getElementById("ppm").value;
+        ton = document.getElementById("ton").value;
+        total_weight_of_slag_in_kg =
+          document.getElementById("totalWeight").value;
+        // console.log(CaO, MgO, Si02, O_ppm, ton, total_weight_of_slag_in_kg)
+
+        Al_in_kg = calculate_Al_in_kg(O_ppm, ton);
+        Al2O3 = calculate_Al2O3(Al_in_kg, total_weight_of_slag_in_kg);
+        basicity = calculate_basicity(CaO, MgO, SiO2, Al2O3);
+
+        document.getElementById("aluminumWeight").innerText = Al_in_kg;
+        document.getElementById("aluminumPercentage").innerText = Al2O3;
+        document.getElementById("basicity").innerText = basicity;
+      }
+    </script>
+  </body>
+</html>
